@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Ai\Agents\TicketTriager;
+use App\Models\AiRun;
+use App\Models\AiUsage;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Laravel\Ai\Responses\StructuredAgentResponse;
@@ -14,6 +16,18 @@ class TicketTriageController extends Controller
      */
     public function __invoke(Request $request, Ticket $ticket)
     {
+        $run = AiRun::create([
+            'team_id' => $ticket->team_id,
+            'user_id' => $request->user()->id,
+            'ticket_id' => $ticket->id,
+            'feature_key' => 'ticket_triage',
+            'status' => 'running',
+            'provider' => 'openai',
+            'model' => null,
+            'input_hash' => sha1($ticket->subject.'|'.$ticket->messages()->latest()->first()?->body),
+            'started_at' => now(),
+        ]);
+
         try {
             /** @var StructuredAgentResponse $response */
             $response = (new TicketTriager)->prompt(
@@ -35,12 +49,30 @@ class TicketTriageController extends Controller
                 ]);
             }
 
+            $run->update([
+                'status' => 'succeeded',
+                'finished_at' => now(),
+            ]);
+
+            $usage = $response->usage;
+
+            AiUsage::create([
+                'ai_run_id' => $run->id,
+                'prompt_tokens' => $usage->inputTokens,
+                'completion_tokens' => $usage->outputTokens,
+                'total_tokens' => $usage->totalTokens(),
+            ]);
+
             return response()->json([
                 'status' => 'ok',
                 'data' => $response,
             ]);
         } catch (\Throwable $e) {
-            // TODO: something here
+            $run->update([
+                'status' => 'failed',
+                'finished_at' => now(),
+                'error_message' => $e->getMessage(),
+            ]);
         }
     }
 }

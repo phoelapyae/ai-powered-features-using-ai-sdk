@@ -61,6 +61,7 @@ class TicketTriageController extends Controller
                 'prompt_tokens' => $usage->inputTokens,
                 'completion_tokens' => $usage->outputTokens,
                 'total_tokens' => $usage->totalTokens(),
+                'cost_usd' => $usage->costUsd ?? null,
             ]);
 
             return response()->json([

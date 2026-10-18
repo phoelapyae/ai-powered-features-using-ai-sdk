@@ -67,8 +67,8 @@ class TicketChatController extends Controller
 
             AiUsage::create([
                 'ai_run_id' => $run->id,
-                'prompt_tokens' => $usage->promptTokens ?? 0,
-                'completion_tokens' => $usage->completionTokens ?? 0,
+                'prompt_tokens' => $usage->inputTokens ?? 0,
+                'completion_tokens' => $usage->outputTokens ?? 0,
                 'total_tokens' => $usage->totalTokens ?? 0,
                 'cost_usd' => $usage->costUsd ?? null,
             ]);

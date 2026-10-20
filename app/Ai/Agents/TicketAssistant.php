@@ -2,13 +2,17 @@
 
 namespace App\Ai\Agents;
 
+use App\Ai\Tools\TicketMessagesTool;
+use App\Ai\Tools\TicketsFactsTool;
 use App\Models\Ticket;
+use App\Models\User;
 use Laravel\Ai\Attributes\MaxTokens;
 use Laravel\Ai\Attributes\Provider;
 use Laravel\Ai\Attributes\UseCheapestModel;
 use Laravel\Ai\Concerns\RemembersConversations;
 use Laravel\Ai\Contracts\Agent;
 use Laravel\Ai\Contracts\Conversational;
+use Laravel\Ai\Contracts\HasTools;
 use Laravel\Ai\Enums\Lab;
 use Laravel\Ai\Promptable;
 use Stringable;
@@ -16,11 +20,14 @@ use Stringable;
 #[Provider(Lab::OpenAI)]
 #[UseCheapestModel]
 #[MaxTokens(1500)]
-class TicketAssistant implements Agent, Conversational
+class TicketAssistant implements Agent, Conversational, HasTools
 {
     use Promptable, RemembersConversations;
 
-    public function __construct(public readonly int $ticketId){}
+    public function __construct(
+        public readonly int $ticketId,
+        public readonly ?int $userId = null
+    ){}
 
     /**
      * Get the instructions that the agent should follow.
@@ -80,5 +87,15 @@ Ticket Context:
 Recent Messages:
 $messages
 CONTEXT;
+    }
+
+    public function tools(): iterable
+    {
+        $user = $this->userId ? User::find($this->userId) : null;
+
+        return [
+            new TicketsFactsTool(ticketId: $this->ticketId, user: $user),
+            new TicketMessagesTool(ticketId: $this->ticketId, user: $user),
+        ];
     }
 }

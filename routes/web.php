@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AiDocumentQaController;
 use App\Http\Controllers\AiKnowledgeSearchController;
 use App\Http\Controllers\TicketChatController;
 use App\Http\Controllers\TicketDraftReplyStreamController;
@@ -27,6 +28,18 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('ai/knowledge-search', AiKnowledgeSearchController::class)
         ->name('ai.knowledge-search');
+
+    Route::get('ai/document-qa', [AiDocumentQaController::class, 'index'])
+        ->name('ai.document-qa');
+
+    Route::post('ai/document-qa/upload', [AiDocumentQaController::class, 'store'])
+        ->name('ai.document-qa.upload');
+
+    Route::post('ai/document-qa/ask', [AiDocumentQaController::class, 'ask'])
+        ->name('ai.document-qa.ask');
+
+    Route::delete('ai/document-qa/{uploadedDocument}', [AiDocumentQaController::class, 'destroy'])
+        ->name('ai.document-qa.delete');
 });
 
 require __DIR__.'/settings.php';

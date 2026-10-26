@@ -22,6 +22,9 @@
                     <flux:sidebar.item icon="sparkles" :href="route('ai.knowledge-search')" :current="request()->routeIs('ai.knowledge-search')" wire:navigate>
                         {{ __('AI Search') }}
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="document-text" :href="route('ai.document-qa')" :current="request()->routeIs('ai.document-qa*')" wire:navigate>
+                        {{ __('Ask Document') }}
+                    </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AiDocumentQaController;
 use App\Http\Controllers\AiKnowledgeSearchController;
+use App\Http\Controllers\AiProductDescriptionController;
 use App\Http\Controllers\TicketChatController;
 use App\Http\Controllers\TicketDraftReplyStreamController;
 use App\Http\Controllers\TicketTriageController;
@@ -40,6 +41,12 @@ Route::middleware(['auth'])->group(function () {
 
     Route::delete('ai/document-qa/{uploadedDocument}', [AiDocumentQaController::class, 'destroy'])
         ->name('ai.document-qa.delete');
+
+    Route::get('ai/product-description', [AiProductDescriptionController::class, 'index'])
+        ->name('ai.product-description');
+
+    Route::post('ai/product-description', [AiProductDescriptionController::class, 'store'])
+        ->name('ai.product-description.store');
 });
 
 require __DIR__.'/settings.php';

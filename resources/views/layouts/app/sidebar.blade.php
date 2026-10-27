@@ -25,6 +25,9 @@
                     <flux:sidebar.item icon="document-text" :href="route('ai.document-qa')" :current="request()->routeIs('ai.document-qa*')" wire:navigate>
                         {{ __('Ask Document') }}
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="megaphone" :href="route('ai.product-description')" :current="request()->routeIs('ai.product-description*')" wire:navigate>
+                        {{ __('AI Copy') }}
+                    </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 

@@ -156,6 +156,8 @@ class AiDocumentQaController extends Controller
             'output_text' => (string) $response,
         ]);
 
+        // return $response->toolResults;
+
         if (isset($response->usage)) {
             $usage = $response->usage;
 

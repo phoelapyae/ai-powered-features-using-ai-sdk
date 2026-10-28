@@ -21,6 +21,7 @@ class AiRun extends Model
         'finished_at',
         'error_message',
         'output_text',
+        'invocation_id'
     ];
 
     protected $casts = [

@@ -13,6 +13,7 @@ class AiUsage extends Model
         'completion_tokens',
         'total_tokens',
         'cost_usd',
+        'invocation_id'
     ];
 
     public function run() : BelongsTo {

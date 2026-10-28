@@ -52,16 +52,7 @@ class TicketTriageController extends Controller
             $run->update([
                 'status' => 'succeeded',
                 'finished_at' => now(),
-            ]);
-
-            $usage = $response->usage;
-
-            AiUsage::create([
-                'ai_run_id' => $run->id,
-                'prompt_tokens' => $usage->inputTokens,
-                'completion_tokens' => $usage->outputTokens,
-                'total_tokens' => $usage->totalTokens(),
-                'cost_usd' => $usage->costUsd ?? null,
+                'invocation_id' => $response->invocationId
             ]);
 
             return response()->json([

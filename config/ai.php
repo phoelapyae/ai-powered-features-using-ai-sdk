@@ -161,4 +161,5 @@ return [
         ],
     ],
 
+    'daily_team_token_budget' => 50000,
 ];

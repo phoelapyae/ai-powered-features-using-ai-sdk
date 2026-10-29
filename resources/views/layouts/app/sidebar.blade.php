@@ -28,6 +28,9 @@
                     <flux:sidebar.item icon="megaphone" :href="route('ai.product-description')" :current="request()->routeIs('ai.product-description*')" wire:navigate>
                         {{ __('AI Copy') }}
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="megaphone" :href="route('ai.creative-assistant')" :current="request()->routeIs('ai.creative-assistant*')" wire:navigate>
+                        {{ __('Creative Assistant') }}
+                    </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 
